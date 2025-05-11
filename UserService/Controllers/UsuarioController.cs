@@ -55,8 +55,13 @@ namespace UserService.Controllers
             if (usuario == null) { return BadRequest(); }
             else
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
                 if (!_validateCpfCnpj.CpfCnpjIsValid(usuario.Cpf ?? ""))
                 {
+                    ModelState.AddModelError("Cpf", "CPF inválido");
                     return BadRequest(ModelState);
                 }
                 else

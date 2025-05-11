@@ -10,127 +10,51 @@
         {
             return (CpfIsValid(cpfCnpj) || CnpjIsValid(cpfCnpj));
         }
-        private static bool CpfIsValid(string cpf)
+        private static int CalcularDigitos(string cnpjCpfSemMascara, int length, int shift, int[] multiplicadores)
         {
-            int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
-            int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
-
-            cpf = cpf.Trim().Replace(".", "").Replace("-", "");
-            if (cpf.Length != 11)
-            {
-                return false;
-            }
-
-            for (int j = 0; j < 10; j++)
-            {
-                if (j.ToString().PadLeft(11, char.Parse(j.ToString())) == cpf)
-                {
-                    return false;
-                }
-            }
-
-            string tempCpf = cpf.Substring(0, 9);
             int soma = 0;
 
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < length; i++)
             {
-                soma += int.Parse(tempCpf[i].ToString()) * multiplicador1[i];
+                soma += ((int)cnpjCpfSemMascara[i] - '0') * multiplicadores[i + shift];
             }
 
             int resto = soma % 11;
-            if (resto < 2)
-            {
-                resto = 0;
-            }
-            else
-            {
-                resto = 11 - resto;
-            }
+            return resto < 2 ? 0 : 11 - resto;
+        }
 
-            string digito = resto.ToString();
-            tempCpf += digito;
-            soma = 0;
-            for (int i = 0; i < 10; i++)
-            {
-                soma += int.Parse(tempCpf[i].ToString()) * multiplicador2[i];
-            }
+        private static bool CpfIsValid(string cpf)
+        {
+            string cpfSemMascara = new string(cpf.Where(char.IsDigit).ToArray());
+            int[] multiplicadoresCpf = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
 
-            resto = soma % 11;
-            if (resto < 2)
-            {
-                resto = 0;
-            }
-            else
-            {
-                resto = 11 - resto;
-            }
-
-            digito += resto.ToString();
-
-            if (cpf.All(digito => digito == cpf[0]))
+            if (cpfSemMascara.Length != 11 || cpfSemMascara.All(digito => digito == cpfSemMascara[0]))
             {
                 return false;
             }
 
-            return cpf.EndsWith(digito);
+            int digito1 = CalcularDigitos(cpfSemMascara, cpfSemMascara.Length - 2, 1, multiplicadoresCpf);
+            int digito2 = CalcularDigitos(cpfSemMascara, cpfSemMascara.Length - 1, 0, multiplicadoresCpf);
+
+            return cpfSemMascara.EndsWith(String.Concat(digito1, digito2));
         }
 
         private static bool CnpjIsValid(string cnpj)
         {
-            int[] multiplicador1 = new int[12] { 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
-            int[] multiplicador2 = new int[13] { 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
+            string cnpjSemMascara = new string(cnpj.Where(char.IsDigit).ToArray());
+            int[] multiplicadoresCnpj = new int[13] { 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
 
-            cnpj = cnpj.Trim().Replace(".", "").Replace("-", "").Replace("/", "");
-            if (cnpj.Length != 14)
+            if (cnpjSemMascara.Length != 14 || cnpjSemMascara.All(digito => digito == cnpjSemMascara[0]))
             {
                 return false;
             }
 
-            string tempCnpj = cnpj.Substring(0, 12);
-            int soma = 0;
+            int digito1 = CalcularDigitos(cnpjSemMascara, cnpjSemMascara.Length - 2, 1, multiplicadoresCnpj);
+            int digito2 = CalcularDigitos(cnpjSemMascara, cnpjSemMascara.Length - 1, 0, multiplicadoresCnpj);
 
-            for (int i = 0; i < 12; i++)
-            {
-                soma += int.Parse(tempCnpj[i].ToString()) * multiplicador1[i];
-            }
-
-            int resto = (soma % 11);
-            if (resto < 2)
-            {
-                resto = 0;
-            }
-            else
-            {
-                resto = 11 - resto;
-            }
-
-            string digito = resto.ToString();
-            tempCnpj += digito;
-            soma = 0;
-            for (int i = 0; i < 13; i++)
-            {
-                soma += int.Parse(tempCnpj[i].ToString()) * multiplicador2[i];
-            }
-
-            resto = (soma % 11);
-            if (resto < 2)
-            {
-                resto = 0;
-            }
-            else
-            {
-                resto = 11 - resto;
-            }
-
-            digito += resto.ToString();
-
-            if (cnpj.All(digito => digito == cnpj[0]))
-            {
-                return false;
-            }
-
-            return cnpj.EndsWith(digito);
+            return cnpjSemMascara.EndsWith(String.Concat(digito1, digito2));
         }
+        
     }
 }
 
