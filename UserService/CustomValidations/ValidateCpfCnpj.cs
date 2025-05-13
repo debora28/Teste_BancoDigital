@@ -6,55 +6,73 @@
     }
     public class ValidateCpfCnpj : IValidateCpfCnpj
     {
+        private const int CpfLength = 11;
+        private const int CnpjLength = 14;
+
+        private static readonly int[] MultipliersCpf = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2];
+        private static readonly int[] MultipliersCnpj = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+        
         public bool CpfCnpjIsValid(string cpfCnpj)
         {
+            if (string.IsNullOrWhiteSpace(cpfCnpj))
+            {
+                return false;
+            }
             return (CpfIsValid(cpfCnpj) || CnpjIsValid(cpfCnpj));
         }
-        private static int CalcularDigitos(string cnpjCpfSemMascara, int length, int shift, int[] multiplicadores)
+        private static int CalculateDigits(string cnpjCpfNoMask, int length, int shift, int[] multipliers)
         {
-            int soma = 0;
+            int sum = 0;
 
             for (int i = 0; i < length; i++)
             {
-                soma += ((int)cnpjCpfSemMascara[i] - '0') * multiplicadores[i + shift];
+                sum += ((int)cnpjCpfNoMask[i] - '0') * multipliers[i + shift];
             }
 
-            int resto = soma % 11;
-            return resto < 2 ? 0 : 11 - resto;
+            int rest = sum % 11;
+            return rest < 2 ? 0 : 11 - rest;
+        }
+
+        private static string RemoveMask(string cnpjCpf)
+        {
+            return new string(cnpjCpf.Where(char.IsDigit).ToArray());
+        }
+
+        private static bool AllDigitsIdentical(string cnpjCpf)
+        {
+            return cnpjCpf.All(digit => digit == cnpjCpf[0]);
         }
 
         private static bool CpfIsValid(string cpf)
         {
-            string cpfSemMascara = new string(cpf.Where(char.IsDigit).ToArray());
-            int[] multiplicadoresCpf = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+            string cpfNoMask = RemoveMask(cpf);
 
-            if (cpfSemMascara.Length != 11 || cpfSemMascara.All(digito => digito == cpfSemMascara[0]))
+            if (cpfNoMask.Length != CpfLength || AllDigitsIdentical(cpfNoMask))
             {
                 return false;
             }
 
-            int digito1 = CalcularDigitos(cpfSemMascara, cpfSemMascara.Length - 2, 1, multiplicadoresCpf);
-            int digito2 = CalcularDigitos(cpfSemMascara, cpfSemMascara.Length - 1, 0, multiplicadoresCpf);
+            int digit1 = CalculateDigits(cpfNoMask, cpfNoMask.Length - 2, 1, MultipliersCpf);
+            int digit2 = CalculateDigits(cpfNoMask, cpfNoMask.Length - 1, 0, MultipliersCpf);
 
-            return cpfSemMascara.EndsWith(String.Concat(digito1, digito2));
+            return cpfNoMask.EndsWith(String.Concat(digit1, digit2));
         }
 
         private static bool CnpjIsValid(string cnpj)
         {
-            string cnpjSemMascara = new string(cnpj.Where(char.IsDigit).ToArray());
-            int[] multiplicadoresCnpj = new int[13] { 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
+            string cnpjNoMask = RemoveMask(cnpj);
 
-            if (cnpjSemMascara.Length != 14 || cnpjSemMascara.All(digito => digito == cnpjSemMascara[0]))
+            if (cnpjNoMask.Length != CnpjLength || AllDigitsIdentical(cnpjNoMask))
             {
                 return false;
             }
 
-            int digito1 = CalcularDigitos(cnpjSemMascara, cnpjSemMascara.Length - 2, 1, multiplicadoresCnpj);
-            int digito2 = CalcularDigitos(cnpjSemMascara, cnpjSemMascara.Length - 1, 0, multiplicadoresCnpj);
+            int digit1 = CalculateDigits(cnpjNoMask, cnpjNoMask.Length - 2, 1, MultipliersCnpj);
+            int digit2 = CalculateDigits(cnpjNoMask, cnpjNoMask.Length - 1, 0, MultipliersCnpj);
 
-            return cnpjSemMascara.EndsWith(String.Concat(digito1, digito2));
+            return cnpjNoMask.EndsWith(String.Concat(digit1, digit2));
         }
-        
+
     }
 }
 
