@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using AccountService.Models;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace AccountService.Models
 {
@@ -10,6 +11,7 @@ namespace AccountService.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [SwaggerSchema(ReadOnly = true)]
         public int IdConta { get; set; }
         [Required]
         public string Agencia { get; set; } = string.Empty;

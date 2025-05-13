@@ -2,12 +2,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace TransactionService.Models
 {
     public class Operacao
     {
         [Key]
+        [SwaggerSchema(ReadOnly = true)]
         public int IdOperacao { get; set; }
         [NotMapped]
         static int nextId;
