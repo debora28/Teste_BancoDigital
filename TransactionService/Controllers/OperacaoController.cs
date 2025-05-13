@@ -53,12 +53,12 @@ namespace TransactionService.Controllers
             if (operacao == null) { return BadRequest(); }
             else
             {
-                //if (!ModelState.IsValid)
-                //{
-                //    return BadRequest(ModelState);
-                //}
-                //else
-                //{
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                else
+                {
                     try
                     {
                         if (id == operacao.IdOperacao)
@@ -75,7 +75,7 @@ namespace TransactionService.Controllers
                     {
                         return BadRequest();
                     }
-                //}
+                }
             }
         }
 

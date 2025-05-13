@@ -9,30 +9,24 @@ namespace TransactionService.Migrations
     {
         public BancoContext(DbContextOptions options) : base(options)
         {
+            try
+            {
                 Database.EnsureCreated();
-            //try
-            //{
-            //}
-            //catch
-            //{
-            //    Console.WriteLine("Erro na classe ou no DBContext");
-            //}
+            }
+            catch
+            {
+                Console.WriteLine("Erro na classe ou no DBContext");
+            }
         }
 
-        //Para cada entidade, criar um dbset:
-        //public DbSet<Conta> Contas { get; set; }
         public DbSet<Operacao> Operacoes { get; set; }
 
-        //Aqui se especifica qual a chave primária e outras definições de banco:
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            //Criando as entidades:
             modelBuilder.Entity<Operacao>().HasKey(c => c.IdOperacao);
 
-            //Alimentando as tabelas (seeding): 
-           
             modelBuilder.Entity<Operacao>().HasData(
             new
             {

@@ -15,7 +15,6 @@ namespace UserService.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [SwaggerSchema(ReadOnly = true)]
         public int Id { get; set; }
-        //Nas propriedades que não precisam de tabela no banco, coloca-se a anotação [NotMapped]
         [Required]
         public string? Nome { get; set; } = nome;
         [Required]
