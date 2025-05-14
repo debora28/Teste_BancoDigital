@@ -2,72 +2,97 @@
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using AccountService.Models;
 using System;
+using Microsoft.Identity.Client;
 
 namespace AccountService.Migrations
 {
-    public class BancoContext : DbContext
+    public class Bank01Context : DbContext
     {
-        public BancoContext(DbContextOptions options) : base(options)
+        public Bank01Context(DbContextOptions options) : base(options)
         {
+            try
+            {
                 Database.EnsureCreated();
-            //try
-            //{
-            //}
-            //catch
-            //{
-            //    Console.WriteLine("Erro na classe ou no DBContext");
-            //}
+            }
+            catch
+            {
+                Console.WriteLine("Erro na classe ou no DBContext do Bank01");
+            }
         }
 
-        //Para cada entidade, criar um dbset:
-        public DbSet<Conta> Contas { get; set; }
-
-        //Aqui se especifica qual a chave primária e outras definições de banco:
+        public DbSet<Status> Status { get; set; }
+        public DbSet<Account> Account { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Status>().HasKey(c => c.StatusId);
 
-            //Criando as entidades:
-            modelBuilder.Entity<Conta>().HasKey(c => c.IdConta);
-
-            //Alimentando as tabelas (seeding): 
-            modelBuilder.Entity<Conta>().HasData(
+            modelBuilder.Entity<Status>().HasData(
                 new
                 {
-                    IdConta = 1,
-                    ClienteId = 1,
-                    CpfCliente = "08995228407",
-                    Agencia = "0123",
-                    NumConta = 1,
-                    Saldo = 0m,
-                    Ativa = true,
-                    Bloqueada = false,
-                    LimiteDiario = 0m
+                    StatusId = 1,
+                    StatusName = "Ativo"
                 },
                 new
                 {
-                    IdConta = 2,
-                    ClienteId = 2,
-                    CpfCliente = "60671150006",
-                    Agencia = "0123",
-                    NumConta = 2,
-                    Saldo = 0m,
-                    Ativa = true,
-                    Bloqueada = false,
-                    LimiteDiario = 0m
+                    StatusId = 2,
+                    StatusName = "Bloqueado"
                 },
                 new
                 {
-                    IdConta = 3,
-                    ClienteId = 3,
-                    CpfCliente = "47633984074",
-                    Agencia = "0123",
-                    NumConta = 3,
-                    Saldo = 0m,
-                    Ativa = true,
-                    Bloqueada = false,
-                    LimiteDiario = 0m
+                    StatusId = 3,
+                    StatusName = "Desbloqueado"
+                },
+                new
+                {
+                    StatusId = 4,
+                    StatusName = "Fechado"
+                },
+                new
+                {
+                    StatusId = 5,
+                    StatusName = "Cancelado"
                 });
+            modelBuilder.Entity<Account>().HasKey(c => c.AccountId);
+
+            modelBuilder.Entity<Account>().HasData(
+                new
+                {
+                    AccountId = 1,
+                    AccountType = "Corrente",
+                    Agency = "7460",
+                    AccountNumber = "7460",
+                    DateOpened = DateTime.Now,
+                    DateClosed = DateTime.Now,
+                    DailyLimit = 2000m,
+                    ClientId = 1,
+                    StatusId = 1
+                },
+                new
+                {
+                    AccountId = 2,
+                    AccountType = "Poupança",
+                    Agency = "7460",
+                    AccountNumber = "7461",
+                    DateOpened = DateTime.Now,
+                    DateClosed = DateTime.Now,
+                    DailyLimit = 5000m,
+                    ClientId = 2,
+                    StatusId = 2
+                },
+                new
+                {
+                    AccountId = 3,
+                    AccountType = "Corrente",
+                    Agency = "7460",
+                    AccountNumber = "7462",
+                    DateOpened = DateTime.Now,
+                    DateClosed = DateTime.Now,
+                    DailyLimit = 2000m,
+                    ClientId = 1,
+                    StatusId = 1
+                }
+            );
         }
     }
 }

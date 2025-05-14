@@ -1,65 +1,65 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UserService.CustomValidations;
-using UserService.Repositories;
-using UserService.Model;
+using ClientService.CustomValidations;
+using ClientService.Repositories;
+using ClientService.Model;
 
-namespace UserService.Controllers
+namespace ClientService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsuarioController : ControllerBase
+    public class ClientController : ControllerBase
     {
-        private readonly IUsuariosRepository _usuariosRepository;
+        private readonly IClientsRepository _clientsRepository;
         private readonly IValidateCpfCnpj _validateCpfCnpj;
 
-        public UsuarioController(IUsuariosRepository usuariosRepository, IValidateCpfCnpj validateCpfCnpj)
+        public ClientController(IClientsRepository clientsRepository, IValidateCpfCnpj validateCpfCnpj)
         {
-            _usuariosRepository = usuariosRepository;
+            _clientsRepository = clientsRepository;
             _validateCpfCnpj = validateCpfCnpj;
         }
 
         //GETALL 
         [HttpGet]
-        public async Task<IEnumerable<Usuario>> GetAll()
+        public async Task<IEnumerable<Client>> GetAll()
         {
-            var usuarios = await _usuariosRepository.GetUsuarios();
-            if (usuarios == null)
+            var clients = await _clientsRepository.GetClients();
+            if (clients == null)
             {
-                return (IEnumerable<Usuario>)NotFound("Não há registros.");
+                return (IEnumerable<Client>)NotFound("Não há registros.");
             }
             else
             {
-                return usuarios;
+                return clients;
             }
         }
 
         //GETONE
         [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetOne(int id)
+        public async Task<ActionResult<Client>> GetOne(int id)
         {
-            var usuario = await _usuariosRepository.GetUsuario(id);
-            if (usuario == null)
+            var client = await _clientsRepository.GetClient(id);
+            if (client == null)
             {
                 return NotFound(new { message = $"Usuário de id={id} não encontrado." });
             }
             else
             {
-                return usuario;
+                return client;
             }
         }
 
         //POST
         [HttpPost]
-        public async Task<ActionResult<Usuario>> Post(Usuario usuario)
+        public async Task<ActionResult<Client>> Post(Client client)
         {
-            if (usuario == null) { return BadRequest(); }
+            if (client == null) { return BadRequest(); }
             else
             {
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
-                if (!_validateCpfCnpj.CpfCnpjIsValid(usuario.Cpf ?? ""))
+                if (!_validateCpfCnpj.CpfCnpjIsValid(client.CpfCnpj ?? ""))
                 {
                     ModelState.AddModelError("Cpf", "CPF inválido");
                     return BadRequest(ModelState);
@@ -68,8 +68,8 @@ namespace UserService.Controllers
                 {
                     try
                     {
-                        var usuarioNovo = await _usuariosRepository.CreateUsuario(usuario);
-                        return CreatedAtAction(nameof(GetAll), new { id = usuarioNovo.Id }, usuarioNovo);
+                        var newClient = await _clientsRepository.CreateClient(client);
+                        return CreatedAtAction(nameof(GetAll), new { id = newClient.ClientId }, newClient);
                     }
                     catch
                     {
@@ -81,12 +81,12 @@ namespace UserService.Controllers
 
         //PUT
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Usuario usuario)
+        public async Task<ActionResult> Put(int id, [FromBody] Client client)
         {
-            if (usuario == null) { return NotFound(); }
+            if (client == null) { return NotFound(); }
             else
             {
-                if (!_validateCpfCnpj.CpfCnpjIsValid(usuario.Cpf ?? ""))
+                if (!_validateCpfCnpj.CpfCnpjIsValid(client.CpfCnpj ?? ""))
                 {
                     return BadRequest(ModelState);
                 }
@@ -94,9 +94,9 @@ namespace UserService.Controllers
                 {
                     try
                     {
-                        if (id == usuario.Id)
+                        if (id == client.ClientId)
                         {
-                            await _usuariosRepository.UpdateUsuario(usuario);
+                            await _clientsRepository.UpdateClient(client);
                             return Ok();
                         }
                         else
@@ -117,9 +117,9 @@ namespace UserService.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var usuario = await _usuariosRepository.GetUsuario(id);
+            var client = await _clientsRepository.GetClient(id);
 
-            if (usuario == null)
+            if (client == null)
             {
                 return NotFound();
             }
@@ -127,9 +127,9 @@ namespace UserService.Controllers
             {
                 try
                 {
-                    if (id == usuario.Id)
+                    if (id == client.ClientId)
                     {
-                        await _usuariosRepository.DeleteUsuario(usuario.Id);
+                        await _clientsRepository.DeleteClient(client.ClientId);
                         return Ok();
                     }
                     else

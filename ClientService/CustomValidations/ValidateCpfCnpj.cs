@@ -1,4 +1,4 @@
-﻿namespace UserService.CustomValidations
+﻿namespace ClientService.CustomValidations
 {
     public interface IValidateCpfCnpj
     {

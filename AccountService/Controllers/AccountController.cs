@@ -7,49 +7,49 @@ namespace AccountService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ContaController : ControllerBase
+    public class AccountController : ControllerBase
     {
-        private readonly IContasRepository _contasRepository;
+        private readonly IAccountsRepository _accountsRepository;
 
-        public ContaController(IContasRepository contasRepository)
+        public AccountController(IAccountsRepository accountsRepository)
         {
-            _contasRepository = contasRepository;
+            _accountsRepository = accountsRepository;
         }
 
-        // GET: ContaController
+        // GET: AccountController
         [HttpGet]
-        public async Task<IEnumerable<Conta>> GetAll()
+        public async Task<IEnumerable<Account>> GetAll()
         {
-            return await _contasRepository.GetContas();
+            return await _accountsRepository.GetAccounts();
         }
 
-        // GET: ContaController/Details/5
+        // GET: AccountController/Details/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Conta>> GetOne(int id)
+        public async Task<ActionResult<Account>> GetOne(int id)
         {
-            return await _contasRepository.GetConta(id);
+            return await _accountsRepository.GetAccount(id);
         }
 
-        // GET: ContaController/Create
+        // GET: AccountController/Create
         [HttpPost]
-        public async Task<ActionResult<Conta>> Post([FromBody] Conta conta)
+        public async Task<ActionResult<Account>> Post([FromBody] Account account)
         {
-            if (conta == null)
+            if (account == null)
             {
                 return BadRequest();
             }
             else
             {
-                var contaNova = await _contasRepository.CreateConta(conta);
-                return CreatedAtAction(nameof(GetAll), new {id = contaNova.IdConta }, contaNova);
+                var newAccount = await _accountsRepository.CreateAccount(account);
+                return CreatedAtAction(nameof(GetAll), new {id = newAccount.AccountId }, newAccount);
             }
         }
 
-        // GET: ContaController/Edit/5
+        // GET: AccountController/Edit/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Conta conta)
+        public async Task<ActionResult> Put(int id, [FromBody] Account account)
         {
-            if (conta == null) { return BadRequest(); }
+            if (account == null) { return BadRequest(); }
             else
             {
                 //if (!ModelState.IsValid)
@@ -60,9 +60,9 @@ namespace AccountService.Controllers
                 //{
                     try
                     {
-                        if (id == conta.IdConta)
+                        if (id == account.AccountId)
                         {
-                            await _contasRepository.UpdateConta(conta);
+                            await _accountsRepository.UpdateAccount(account);
                             return Ok();
                         }
                         else
@@ -78,19 +78,19 @@ namespace AccountService.Controllers
             }
         }
 
-        // DELETE: ContaController/Delete/5
+        // DELETE: AccountController/Delete/5
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var conta = await _contasRepository.GetConta(id);
+            var account = await _accountsRepository.GetAccount(id);
 
-            if (conta == null)
+            if (account == null)
             {
                 return NotFound();
             }
             else
             {
-                await _contasRepository.DeleteConta(conta.IdConta);
+                await _accountsRepository.DeleteAccount(account.AccountId);
                 return NoContent();
             }
         }

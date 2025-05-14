@@ -1,13 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using UserService.CustomValidations;
-using UserService.Migrations;
-using UserService.Repositories;
+using ClientService.CustomValidations;
+using ClientService.Migrations;
+using ClientService.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<BancoContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<Bank01Context>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddSingleton<IValidateCpfCnpj, ValidateCpfCnpj>();
-builder.Services.AddScoped<IUsuariosRepository, UsuariosRepository>();
+builder.Services.AddScoped<IClientsRepository, ClientsRepository>();
 
 builder.Services.Configure<RouteOptions>(options =>
 {

@@ -5,9 +5,9 @@ using TransactionService.Models;
 
 namespace TransactionService.Migrations
 {
-    public class BancoContext : DbContext
+    public class Bank01Context : DbContext
     {
-        public BancoContext(DbContextOptions options) : base(options)
+        public Bank01Context(DbContextOptions options) : base(options)
         {
             try
             {
@@ -19,33 +19,50 @@ namespace TransactionService.Migrations
             }
         }
 
-        public DbSet<Operacao> Operacoes { get; set; }
+        public DbSet<TypeTransaction> TypeTransaction { get; set; }
+        public DbSet<Transaction> Transaction { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Operacao>().HasKey(c => c.IdOperacao);
+            modelBuilder.Entity<Transaction>().HasKey(c => c.TransactionId);
 
-            modelBuilder.Entity<Operacao>().HasData(
+            modelBuilder.Entity<Transaction>().HasData(
             new
             {
-                IdOperacao = 1,
-                TipoOperacao = "Depósito",
-                DataOperacao = new DateTime(),
-                //Versao = 1,
-                Valor = 8798.13m,
-                IdConta = 1
+                TransactionId = 2,
+                TransactionDate = new DateTime(),
+                Amount = 8798.13m,
+                AccountId = 1,
+                TypeTransactionId = 1
             },
             new
             {
-                IdOperacao = 2,
-                TipoOperacao = "Saque",
-                DataOperacao = new DateTime(),
-                //Versao = 1,
-                Valor = 452.17m,
-                IdConta = 1
+                TransactionId = 1,
+                TransactionDate = new DateTime(),
+                Amount = 8798.13m,
+                AccountId = 1,
+                TypeTransactionId = 1
             }
+            );
+
+            modelBuilder.Entity<TypeTransaction>().HasKey(c => c.TypeTransactionId);
+            modelBuilder.Entity<TypeTransaction>().HasData(
+                new { TypeTransactionId = 1, TypeTransactionName = "Depósito" },
+                new { TypeTransactionId = 2, TypeTransactionName = "Saque" },
+                new { TypeTransactionId = 3, TypeTransactionName = "Saldo" },
+                new { TypeTransactionId = 4, TypeTransactionName = "Pix" },
+                new { TypeTransactionId = 5, TypeTransactionName = "Transferência" },
+                new { TypeTransactionId = 6, TypeTransactionName = "Pagamento" },
+                new { TypeTransactionId = 7, TypeTransactionName = "Recarga de Celular" },
+                new { TypeTransactionId = 8, TypeTransactionName = "Comprovantes" },
+                new { TypeTransactionId = 9, TypeTransactionName = "Extrato Simples" },
+                new { TypeTransactionId = 10, TypeTransactionName = "Extrato por Período" },
+                new { TypeTransactionId = 11, TypeTransactionName = "Bloqueio de Conta" },
+                new { TypeTransactionId = 12, TypeTransactionName = "Desbloqueio de Conta" },
+                new { TypeTransactionId = 13, TypeTransactionName = "Alteração de Limite Diário" },
+                new { TypeTransactionId = 14, TypeTransactionName = "Cancelamento de Conta" }
             );
         }
     }

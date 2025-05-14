@@ -4,8 +4,9 @@ using TransactionService.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<BancoContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<IOperacoesRepository, OperacoesRepository>();
+builder.Services.AddDbContext<Bank01Context>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<ITransactionsRepository, TransactionsRepository>(); 
+builder.Services.AddScoped<ITypeTransactionsRepository, TypeTransactionsRepository>();
 
 builder.Services.Configure<RouteOptions>(options =>
 {

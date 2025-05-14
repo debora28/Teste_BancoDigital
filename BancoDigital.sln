@@ -3,18 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService", "UserService\UserService.csproj", "{0E65735C-09CF-4239-B615-FA2E8AE78400}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountService", "AccountService\AccountService.csproj", "{6B8B939B-9A8B-4869-886A-E5585CEC2B64}"
-	ProjectSection(ProjectDependencies) = postProject
-		{0E65735C-09CF-4239-B615-FA2E8AE78400} = {0E65735C-09CF-4239-B615-FA2E8AE78400}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionService", "TransactionService\TransactionService.csproj", "{832520A1-6ABC-44E5-9B40-6DACA10B4147}"
-	ProjectSection(ProjectDependencies) = postProject
-		{0E65735C-09CF-4239-B615-FA2E8AE78400} = {0E65735C-09CF-4239-B615-FA2E8AE78400}
-		{6B8B939B-9A8B-4869-886A-E5585CEC2B64} = {6B8B939B-9A8B-4869-886A-E5585CEC2B64}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F27880BA-12B4-452E-B4BF-4CA8700129D8}"
 	ProjectSection(SolutionItems) = preProject
@@ -22,16 +13,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientService", "ClientService\ClientService.csproj", "{C13FA0CE-907C-4B50-B6FC-C7A16D529634}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0E65735C-09CF-4239-B615-FA2E8AE78400}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0E65735C-09CF-4239-B615-FA2E8AE78400}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0E65735C-09CF-4239-B615-FA2E8AE78400}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0E65735C-09CF-4239-B615-FA2E8AE78400}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6B8B939B-9A8B-4869-886A-E5585CEC2B64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6B8B939B-9A8B-4869-886A-E5585CEC2B64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B8B939B-9A8B-4869-886A-E5585CEC2B64}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -40,6 +29,10 @@ Global
 		{832520A1-6ABC-44E5-9B40-6DACA10B4147}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{832520A1-6ABC-44E5-9B40-6DACA10B4147}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{832520A1-6ABC-44E5-9B40-6DACA10B4147}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C13FA0CE-907C-4B50-B6FC-C7A16D529634}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C13FA0CE-907C-4B50-B6FC-C7A16D529634}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C13FA0CE-907C-4B50-B6FC-C7A16D529634}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C13FA0CE-907C-4B50-B6FC-C7A16D529634}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

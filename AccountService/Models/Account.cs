@@ -4,51 +4,39 @@ using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using AccountService.Models;
 using Swashbuckle.AspNetCore.Annotations;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AccountService.Models
 {
-    public class Conta
+    public class Account
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [SwaggerSchema(ReadOnly = true)]
-        public int IdConta { get; set; }
+        public int AccountId { get; set; }
         [Required]
-        public string Agencia { get; set; } = string.Empty;
-        //[Index]
-        //[JsonIgnore]
-        public int NumConta { get; private set; }
-        [NotMapped]
-        static int nextConta;
-
+        [StringLength(500)]
+        public string AccountType { get; set; } = string.Empty;
+        [Required]
+        [StringLength(50)]
+        public string Agency { get; set; } = string.Empty;
+        [Required]
+        [StringLength(50)]
+        public string AccountNumber { get; private set; } = string.Empty;
+        [Required]
+        public DateTime DateOpened { get; set; } = DateTime.Now;
+        [AllowNull]
+        public DateTime? DateClosed { get; set; }
+        [Required]
         [Column(TypeName = "decimal(18,2)")]
-        public decimal Saldo { get; set; }
-        public bool Ativa { get; set; }
-        public bool Bloqueada { get; set; }
+        public decimal DailyLimit { get; set; }
+        [Required]
+        public int? ClientId { get; set; }
+        [Required]
+        public int? StatusId { get; set; }
 
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal LimiteDiario { get; set; }
-        //[NotMapped]
-        //[JsonIgnore]
-        //public virtual Usuario? Usuario { get; set; }
-        //[ForeignKey(nameof(Usuario))]
-        //public int? UsuarioId { get; set; }
-        //[JsonIgnore]
-        //public ICollection<Operacao>? Operacoes { get; set; }
-        //public Conta(Usuario usuario, string agencia, int numConta, decimal saldo, bool ativa, bool flagBloqueio, decimal limiteDiario)
-        //{
-        //    this.Usuario = usuario;
-        //    this.Agencia = agencia;
-        //    this.NumConta = numConta;
-        //    this.Saldo = saldo;
-        //    this.Ativa = ativa;
-        //    this.Bloqueada = flagBloqueio;
-        //    this.LimiteDiario = limiteDiario;
-        //}
-        public Conta()
-        {
-            NumConta = Interlocked.Increment(ref nextConta);
-        }
+
 
         //public decimal ConsultarSaldo()
         //{

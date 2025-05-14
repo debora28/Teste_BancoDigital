@@ -12,7 +12,7 @@ The digital account must provide the following functionalities:
 * Each account must have a balance, number and agency available for consultation;
 * It is necessary to have a functionality to issue a bank statement of a given period of time;
 * A client can block and unblock their account at any time;
-* The following transactions must be possible: Withdrawal and deposit;
+* The following transactions must be possible: withdrawal and deposit;
 	* Deposit: allowed for all active and unlocked accounts;
 	* Withdrawal: allowed for all active and unlocked accounts as long as there are sufficient funds for the transaction and the amount does not exceed a configurable daily limit, for example: R$ 2,000.00;
 * The account can never have negative balance;
@@ -26,4 +26,12 @@ dotnet ef migrations add InitialCreate
 ## Update tool, if necessary:
 ```
 dotnet tool update --global dotnet-ef --version 9.0.1
+```
+
+## Changes in the database, update the migration
+```
+dotnet ef migrations add <MigrationName>
+```
+```
+dotnet ef database update
 ```
