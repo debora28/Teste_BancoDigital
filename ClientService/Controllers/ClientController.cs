@@ -2,6 +2,7 @@
 using ClientService.CustomValidations;
 using ClientService.Repositories;
 using ClientService.Model;
+using ClientService.Dtos;
 
 namespace ClientService.Controllers
 {
@@ -81,36 +82,24 @@ namespace ClientService.Controllers
 
         //PUT
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Client client)
+        public async Task<ActionResult> Put(int id, [FromBody] ClientPutDto clientDto)
         {
-            if (client == null) { return NotFound(); }
+            if (clientDto == null) return NotFound();
             else
             {
-                if (!_validateCpfCnpj.CpfCnpjIsValid(client.CpfCnpj ?? ""))
+                try
                 {
-                    return BadRequest(ModelState);
+                    Client client = await _clientsRepository.GetClient(id);
+                    client.ClientName = clientDto.ClientName;
+                    client.DateBirth = clientDto.DateBirth;
+                    await _clientsRepository.UpdateClient(client);
+                    return Ok();
                 }
-                else
+                catch
                 {
-                    try
-                    {
-                        if (id == client.ClientId)
-                        {
-                            await _clientsRepository.UpdateClient(client);
-                            return Ok();
-                        }
-                        else
-                        {
-                            return BadRequest();
-                        }
-                    }
-                    catch
-                    {
-                        return BadRequest();
-                    }
+                    return BadRequest();
                 }
             }
-
         }
 
         //DELETE
@@ -141,7 +130,7 @@ namespace ClientService.Controllers
                 {
                     return BadRequest();
                 }
-                
+
             }
         }
     }
